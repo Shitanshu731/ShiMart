@@ -1,8 +1,13 @@
 import React from "react";
 import ProductList from "./Productlist";
+import VideoSection from "./VideoSection";
 
 const Hero = () => {
-  return <div>This is the hero section.</div>;
+  return (
+    <div>
+      <VideoSection />
+    </div>
+  );
 };
 
 export default Hero;
