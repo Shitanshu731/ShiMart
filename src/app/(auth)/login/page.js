@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const endpoint = process.env.BACKEND_ENDPOINT || "http://localhost:3000";
+  const endpoint =
+    process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:3000";
   const router = useRouter();
   const [credentials, setCredentials] = useState({
     email: "",
