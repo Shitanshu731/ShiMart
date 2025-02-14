@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const endpoint = process.env.BACKEND_ENDPOINT || "http://localhost:3000";
   const router = useRouter();
   const [userData, setUserData] = useState({
     userName: "",
@@ -14,16 +15,13 @@ const Register = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(
-        "https://mart-kappa.vercel.app//api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        }
-      );
+      const response = await fetch(`${endpoint}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
       const data = await response.json();
       console.log("Registered Data:", data);

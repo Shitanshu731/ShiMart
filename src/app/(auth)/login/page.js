@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const endpoint = process.env.BACKEND_ENDPOINT || "http://localhost:3000";
   const router = useRouter();
   const [credentials, setCredentials] = useState({
     email: "",
@@ -12,16 +13,13 @@ const Login = () => {
 
   const fetchUser = async (credentials) => {
     try {
-      const response = await fetch(
-        "https://mart-kappa.vercel.app/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        }
-      );
+      const response = await fetch(`${endpoint}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
 
       const data = await response.json();
       if (response.ok) {
