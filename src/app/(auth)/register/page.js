@@ -15,13 +15,15 @@ const Register = () => {
   });
 
   const fetchUser = async () => {
+    console.log("endpoint:", endpoint);
     try {
-      const response = await fetch(`${endpoint}/api/auth/register`, {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
+        credentials: "include",
       });
 
       const data = await response.json();
