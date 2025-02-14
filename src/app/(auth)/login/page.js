@@ -12,13 +12,12 @@ const Login = () => {
 
   const fetchUser = async (credentials) => {
     try {
-      const response = await fetch(`/api/auth/login`, {
+      const response = await fetch(`http://localhost:5000/api/v1/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(credentials),
-        credentials: "include",
       });
 
       const data = await response.json();

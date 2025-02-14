@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const endpoint =
-    process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:3000";
   const router = useRouter();
   const [userData, setUserData] = useState({
     userName: "",
@@ -15,16 +13,17 @@ const Register = () => {
   });
 
   const fetchUser = async () => {
-    console.log("endpoint:", endpoint);
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/v1/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       const data = await response.json();
       console.log("Registered Data:", data);
