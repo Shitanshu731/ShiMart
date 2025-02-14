@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const endpoint =
+    process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
   const router = useRouter();
   const [credentials, setCredentials] = useState({
     email: "",
@@ -11,8 +13,9 @@ const Login = () => {
   });
 
   const fetchUser = async (credentials) => {
+    console.log(endpoint);
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/users/login`, {
+      const response = await fetch(`${endpoint}/api/v1/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
