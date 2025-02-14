@@ -27,7 +27,13 @@ const Register = () => {
 
       const data = await response.json();
       console.log("Registered Data:", data);
-      router.push("/login"); // Redirect to login after registration
+      if (response.ok) {
+        console.log("Rgister successful");
+        router.push("/login");
+      } else {
+        console.log("Registeration failed:", data.message);
+        alert(data.message);
+      } // Redirect to login after registration
     } catch (error) {
       console.error("Error:", error);
     }
