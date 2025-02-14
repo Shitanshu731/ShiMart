@@ -2,9 +2,6 @@
     "functions": {
       "api/auth/register": {
         "maxDuration": 30
-      },
-      "api/auth/login": {
-        "maxDuration": 30
       }
     }
   }
