@@ -11,7 +11,6 @@ const Login = () => {
   });
 
   const fetchUser = async (credentials) => {
-    console.log("endpoint:", endpoint);
     try {
       const response = await fetch(`/api/auth/login`, {
         method: "POST",
