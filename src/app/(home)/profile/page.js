@@ -5,11 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function Profile() {
-  const { loggedInUser } = useAuth();
+  const { logout, loggedInUser } = useAuth();
   const endpoint =
     process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
+    typeof window !== "undefined" ? sessionStorage.getItem("userToken") : null;
 
   const [userData, setUserData] = useState({
     phoneNumber: "",
@@ -41,14 +41,15 @@ export default function Profile() {
 
   // Function to update user profile
   const updateUser = async () => {
-    if (!loggedInUser?.id) return alert("User not found. Please log in again.");
+    console.log(loggedInUser);
+    if (!loggedInUser) return alert("User not found. Please log in again.");
 
     const updatedData = { ...userData };
     if (!updatedData.password) delete updatedData.password; // Remove empty password
 
     try {
       const response = await fetch(
-        `${endpoint}/api/v1/users/update/${loggedInUser.id}`,
+        `${endpoint}/api/v1/users/update/${loggedInUser._id}`,
         {
           method: "PUT",
           headers: {
@@ -74,7 +75,7 @@ export default function Profile() {
   };
 
   const deleteUser = async () => {
-    if (!loggedInUser?.id) return alert("User not found. Please log in again.");
+    if (!loggedInUser) return alert("User not found. Please log in again.");
 
     const confirmation = confirm(
       "Are you absolutely sure you want to delete your account? This action cannot be undone."
@@ -83,7 +84,7 @@ export default function Profile() {
 
     try {
       const response = await fetch(
-        `${endpoint}/api/v1/users/delete/${loggedInUser.id}`,
+        `${endpoint}/api/v1/users/delete/${loggedInUser._id}`,
         {
           method: "DELETE",
           headers: {
@@ -96,7 +97,7 @@ export default function Profile() {
       if (!response.ok) throw new Error(data.message || "Delete failed");
 
       // Clear local storage and log out
-      localStorage.removeItem("user");
+      logout();
       router.push("/"); // Redirect to home page
       alert("Account deleted successfully!");
     } catch (error) {
