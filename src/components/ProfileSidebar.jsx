@@ -6,7 +6,10 @@ const ProfileSidebar = () => {
   const { loggedInUser, logout } = useAuth();
   const router = useRouter();
   return (
-    <div>
+    <div className="flex gap-4 flex-col mt-10">
+      <Button variant="default" onClick={() => router.push("/profile")}>
+        Profile
+      </Button>
       <Button
         variant={loggedInUser ? "destructive" : "secondary"}
         onClick={

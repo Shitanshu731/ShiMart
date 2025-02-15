@@ -11,6 +11,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import Navbar from "@/components/Navbar";
 
 const products = [
   {
