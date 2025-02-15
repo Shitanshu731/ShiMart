@@ -1,20 +1,20 @@
 "use client"; // Required for React hooks in Next.js App Router
 
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, useMemo } from "react";
 
 // Create context
 const AuthContext = createContext(null);
 
 // Auth Provider component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   // Check if user is stored in localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     try {
       if (storedUser) {
-        setUser(JSON.parse(storedUser).email); // ✅ Extract only email
+        setLoggedInUser(JSON.parse(storedUser)); // ✅ Load full user details
       }
     } catch (error) {
       console.error("Error parsing user data:", error);
@@ -22,22 +22,28 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Login function (only saving email & token)
-  const login = (userData, token) => {
-    setUser(userData.email); // ✅ Only storing the email in state
-    localStorage.setItem("user", JSON.stringify({ email: userData.email })); // ✅ Store only email in localStorage
-    localStorage.setItem("userToken", token); // ✅ Store token separately
+  // Login function (only saving necessary details)
+  const login = (userData) => {
+    setLoggedInUser(userData.user); // ✅ Store full user data
+    localStorage.setItem("user", JSON.stringify(userData.user)); // ✅ Store full user object
+    sessionStorage.setItem("userToken", userData.token); // ✅ Store token in session storage
   };
 
   // Logout function
   const logout = () => {
-    setUser(null);
+    setLoggedInUser(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("userToken");
+    sessionStorage.removeItem("userToken"); // ✅ Remove token on logout
   };
 
+  // Memoize context value for better performance
+  const authContextValue = useMemo(
+    () => ({ loggedInUser, login, logout }),
+    [loggedInUser]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={authContextValue}>
       {children}
     </AuthContext.Provider>
   );

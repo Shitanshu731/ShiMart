@@ -26,7 +26,7 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        login(credentials, data.token);
+        login(data);
         console.log("Login successful");
         router.push("/");
       } else {
