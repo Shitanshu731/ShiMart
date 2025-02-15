@@ -62,7 +62,7 @@ export default function CreateProduct() {
       }
 
       const { data } = await axios.post(
-        `${endpoint}/api/v1/products/createProduct?id=${loggedInUser.id}`,
+        `${endpoint}/api/v1/products/createProduct?id=${loggedInUser._id}`,
         formDataObj,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
