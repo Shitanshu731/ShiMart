@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const { loggedInUser } = useAuth();
@@ -16,6 +17,7 @@ export default function Profile() {
     email: "",
     password: "",
   });
+  const router = useRouter();
 
   // Populate userData when loggedInUser is available
   useEffect(() => {
@@ -71,6 +73,38 @@ export default function Profile() {
     }
   };
 
+  const deleteUser = async () => {
+    if (!loggedInUser?.id) return alert("User not found. Please log in again.");
+
+    const confirmation = confirm(
+      "Are you absolutely sure you want to delete your account? This action cannot be undone."
+    );
+    if (!confirmation) return;
+
+    try {
+      const response = await fetch(
+        `${endpoint}/api/v1/users/delete/${loggedInUser.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Delete failed");
+
+      // Clear local storage and log out
+      localStorage.removeItem("user");
+      router.push("/"); // Redirect to home page
+      alert("Account deleted successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
+  };
+
   if (!loggedInUser) return <p>Please login to view your profile</p>;
 
   return (
@@ -111,7 +145,7 @@ export default function Profile() {
       <Button onClick={updateUser} className="w-full mb-2">
         Update Profile
       </Button>
-      <Button variant="destructive" className="w-full">
+      <Button onClick={deleteUser} variant="destructive" className="w-full">
         Delete Account
       </Button>
     </div>
