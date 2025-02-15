@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const endpoint =
     process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
   const router = useRouter();
@@ -13,7 +15,6 @@ const Login = () => {
   });
 
   const fetchUser = async (credentials) => {
-    console.log(endpoint);
     try {
       const response = await fetch(`${endpoint}/api/v1/users/login`, {
         method: "POST",
@@ -25,6 +26,7 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
+        login(credentials);
         console.log("Login successful");
         console.log("Token:", data.token); // Here we log the token received from the backend
         router.push("/");
