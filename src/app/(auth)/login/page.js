@@ -1,18 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, loggedInUser } = useAuth();
+  const router = useRouter();
+
   const endpoint =
     process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
-  const router = useRouter();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (loggedInUser) {
+      router.push("/");
+      console.log(loggedInUser);
+      alert("You are logged in!");
+    }
+  }, [loggedInUser, router]);
 
   const fetchUser = async (credentials) => {
     try {
@@ -35,6 +44,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
     }
   };
 
@@ -63,6 +73,7 @@ const Login = () => {
                 setCredentials({ ...credentials, email: e.target.value })
               }
               value={credentials.email} // Ensure the input is controlled
+              required
             />
           </div>
           <div>
@@ -75,6 +86,7 @@ const Login = () => {
                 setCredentials({ ...credentials, password: e.target.value })
               }
               value={credentials.password} // Ensure the input is controlled
+              required
             />
           </div>
           <motion.button
