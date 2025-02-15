@@ -9,24 +9,31 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Simulate checking for a logged-in user (e.g., from localStorage or API)
+  // Check if user is stored in localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      if (storedUser) {
+        setUser(JSON.parse(storedUser).email); // ✅ Extract only email
+      }
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      localStorage.removeItem("user"); // Remove corrupted data
     }
   }, []);
 
-  // Login function
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData)); // Persist user session
+  // Login function (only saving email & token)
+  const login = (userData, token) => {
+    setUser(userData.email); // ✅ Only storing the email in state
+    localStorage.setItem("user", JSON.stringify({ email: userData.email })); // ✅ Store only email in localStorage
+    localStorage.setItem("userToken", token); // ✅ Store token separately
   };
 
   // Logout function
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("userToken");
   };
 
   return (

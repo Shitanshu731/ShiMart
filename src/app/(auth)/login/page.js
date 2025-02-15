@@ -26,12 +26,9 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        login(credentials);
+        login(credentials, data.token);
         console.log("Login successful");
-        console.log("Token:", data.token); // Here we log the token received from the backend
         router.push("/");
-        // Optionally, you could store the token in localStorage, cookies, or React state
-        localStorage.setItem("authToken", data.token); // Store token in localStorage for future requests
       } else {
         console.log("Login failed:", data.message);
         alert(data.message);
