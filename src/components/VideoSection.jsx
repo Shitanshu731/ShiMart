@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const VideoSection = () => {
   return (
-    <div className="w-[100vw] h-[100vh] relative ">
+    <div className="w-[100vw] h-[90vh] relative ">
       <Image src="/videoHome.gif" alt="video" layout="fill" objectFit="cover" />
       <Link href="/product-list">
         <Button
