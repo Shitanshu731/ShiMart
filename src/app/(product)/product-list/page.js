@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -11,73 +11,40 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import Navbar from "@/components/Navbar";
+import axios from "axios";
 
-const products = [
-  {
-    id: 1,
-    name: "Iphone 14",
-    price: 1198,
-    rating: 4,
-    reviews: 36,
-    image: "/iphone14.jpeg",
-    category: "Phones",
-    stock: true,
-  },
-  {
-    id: 2,
-    name: "Iphone 15",
-    price: 699,
-    rating: 4.7,
-    reviews: 14,
-    image: "/iphone15.png",
-    category: "Phones",
-    stock: false,
-  },
-  {
-    id: 3,
-    name: "Iphone 13",
-    price: 1893,
-    rating: 2.4,
-    reviews: 9,
-    image: "/iphone14.jpeg",
-    category: "Phones",
-    stock: true,
-  },
-  {
-    id: 4,
-    name: "Iphone 13",
-    price: 1228,
-    rating: 2.4,
-    reviews: 9,
-    image: "/iphone13.jpg",
-    category: "Phones",
-    stock: true,
-  },
-  {
-    id: 5,
-    name: "Iphone 15",
-    price: 1823,
-    rating: 2.4,
-    reviews: 9,
-    image: "/iphone15.png",
-    category: "Phones",
-    stock: true,
-  },
-];
+const endpoint =
+  process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
 
 export default function ProductList() {
+  const [allProducts, setAllProducts] = useState([]);
   const [priceFilter, setPriceFilter] = useState([0, 2000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [theme, setTheme] = useState("light");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const filteredProducts = products.filter(
+  // ✅ Correctly fetching data
+  const getAllProducts = async () => {
+    try {
+      const response = await axios.get(`${endpoint}/api/v1/products/`);
+      setAllProducts(response.data); // ✅ Correct placement
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
+  // ✅ Filtering products based on price
+  const filteredProducts = allProducts.filter(
     (product) =>
       product.price >= priceFilter[0] && product.price <= priceFilter[1]
   );
 
+  // ✅ Sorting products
   const sortedProducts = [...filteredProducts].sort((a, b) =>
     sortBy === "lowToHigh"
       ? a.price - b.price
@@ -103,7 +70,7 @@ export default function ProductList() {
         </Button>
       </div>
 
-      {/* Flexbox Layout: Sidebar + Product List */}
+      {/* Layout: Sidebar + Product List */}
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar (Filters) */}
         <aside
@@ -151,7 +118,7 @@ export default function ProductList() {
 
           {/* Category Filter */}
           <h3 className="font-semibold mt-4">Categories</h3>
-          {["Pastel_Colors", "Digital_Painting", "Fantasy"].map((cat) => (
+          {["phones", "laptops", "headphones"].map((cat) => (
             <div key={cat} className="flex items-center space-x-2">
               <Checkbox
                 id={cat}
@@ -173,30 +140,32 @@ export default function ProductList() {
 
         {/* Product List */}
         <main className="lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {sortedProducts.map((product) => (
-            <Card
-              key={product.id}
-              className={`p-4 shadow-lg rounded-lg transition-all duration-300 ${
-                theme === "dark" ? "bg-gray-800" : "bg-white"
-              }`}
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-60 object-cover rounded"
-              />
-              <CardContent className="text-center">
-                <h2 className="font-bold text-lg">{product.name}</h2>
-                <p className="text-gray-600">${product.price}</p>
-                <p className="text-yellow-500">
-                  {product.rating}⭐ ({product.reviews} reviews)
-                </p>
-                <Button className="mt-2 w-full" disabled={!product.stock}>
-                  {product.stock ? "Add to Cart" : "Out of Stock"}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+          {sortedProducts.length > 0 ? (
+            sortedProducts.map((product) => (
+              <Card
+                key={product._id}
+                className={`p-4 shadow-lg rounded-lg transition-all duration-300 ${
+                  theme === "dark" ? "bg-gray-800" : "bg-white"
+                }`}
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-60 object-cover rounded"
+                />
+                <CardContent className="text-center">
+                  <h2 className="font-bold text-lg">{product.name}</h2>
+                  <p className="text-gray-600">${product.price}</p>
+                  <p className="text-yellow-500">Rating : {product.rating}⭐</p>
+                  <Button className="mt-2 w-full" disabled={!product.stock}>
+                    {product.stock ? "Add to Cart" : "Out of Stock"}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p className="text-center w-full">No products found.</p>
+          )}
         </main>
       </div>
     </div>
