@@ -13,34 +13,38 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import Link from "next/link";
+import { useProduct } from "@/context/ProductContext";
 
 export default function ProductList() {
   const endpoint =
     process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
-  const [allProducts, setAllProducts] = useState([]);
+
+  const [allProduct, setAllProduct] = useState([]);
   const [priceFilter, setPriceFilter] = useState([0, 2000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [theme, setTheme] = useState("light");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { allProducts } = useProduct(); // Fetching the Products from the search Query which is stored in the ProductContext(Globally managed)
+  useEffect(() => {
+    if (allProducts.length > 0) {
+      setAllProduct(allProducts);
+    } else {
+      fetchProducts();
+    }
+  }, [allProducts]);
 
-  // ✅ Correctly fetching data
-  const getAllProducts = async () => {
+  const fetchProducts = async () => {
     try {
       const response = await axios.get(`${endpoint}/api/v1/products/`);
-      setAllProducts(response.data); // ✅ Correct placement
+      setAllProduct(response.data);
     } catch (error) {
-      alert("Error fetching products");
-      console.error(error);
+      console.error("Error fetching products:", error);
     }
   };
 
-  useEffect(() => {
-    getAllProducts();
-  }, []);
-
   // ✅ Filtering products based on price
-  const filteredProducts = allProducts.filter(
+  const filteredProducts = allProduct.filter(
     (product) =>
       product.price >= priceFilter[0] && product.price <= priceFilter[1]
   );

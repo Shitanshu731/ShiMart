@@ -6,13 +6,41 @@ import Image from "next/image";
 import ProfileSidebar from "./ProfileSidebar";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useProduct } from "@/context/ProductContext";
 
 const Navbar = () => {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { setProducts, allProducts } = useProduct();
+  const handleSearch = async () => {
+    if (!query.trim()) return; // Prevent empty searches
 
-  const handleSearch = (query) => {
-    console.log("Searching for:", query);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/v1/products/search?q=${query}`
+      );
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Failed to fetch products");
+
+      // ✅ Store search results in sessionStorage
+      setProducts(data);
+
+      // ✅ Check if already on the product-list page before navigating
+      if (router.pathname !== "/product-list") {
+        router.push("/product-list");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const { loggedInUser } = useAuth();
@@ -28,7 +56,7 @@ const Navbar = () => {
           alt="logo"
           className=" rounded-lg cursor-pointer max-lg:hidden"
         />
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
         <div className="flex items-center space-x-4">
           <h1 className="text-slate-500">
             {loggedInUser ? `${loggedInUser.userName}` : ""}
