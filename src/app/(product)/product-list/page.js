@@ -12,11 +12,11 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import axios from "axios";
-
-const endpoint =
-  process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
+import Link from "next/link";
 
 export default function ProductList() {
+  const endpoint =
+    process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
   const [allProducts, setAllProducts] = useState([]);
   const [priceFilter, setPriceFilter] = useState([0, 2000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -30,7 +30,8 @@ export default function ProductList() {
       const response = await axios.get(`${endpoint}/api/v1/products/`);
       setAllProducts(response.data); // ✅ Correct placement
     } catch (error) {
-      console.error("Error fetching products:", error);
+      alert("Error fetching products");
+      console.error(error);
     }
   };
 
@@ -148,19 +149,23 @@ export default function ProductList() {
                   theme === "dark" ? "bg-gray-800" : "bg-white"
                 }`}
               >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-60 object-cover rounded"
-                />
-                <CardContent className="text-center">
-                  <h2 className="font-bold text-lg">{product.name}</h2>
-                  <p className="text-gray-600">${product.price}</p>
-                  <p className="text-yellow-500">Rating : {product.rating}⭐</p>
-                  <Button className="mt-2 w-full" disabled={!product.stock}>
-                    {product.stock ? "Add to Cart" : "Out of Stock"}
-                  </Button>
-                </CardContent>
+                <Link href={`/product-list/${product._id}`}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-60 object-cover rounded"
+                  />
+                  <CardContent className="text-center">
+                    <h2 className="font-bold text-lg">{product.name}</h2>
+                    <p className="text-gray-600">${product.price}</p>
+                    <p className="text-yellow-500">
+                      Rating : {product.rating}⭐
+                    </p>
+                    <Button className="mt-2 w-full" disabled={!product.stock}>
+                      {product.stock ? "Add to Cart" : "Out of Stock"}
+                    </Button>
+                  </CardContent>
+                </Link>
               </Card>
             ))
           ) : (
