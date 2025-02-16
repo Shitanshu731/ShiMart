@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useProduct } from "@/context/ProductContext";
 
 const Navbar = () => {
+  const endpoint =
+    process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || "http://localhost:5000";
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -22,9 +24,7 @@ const Navbar = () => {
     setError(null);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/v1/products/search?q=${query}`
-      );
+      const res = await fetch(`${endpoint}/api/v1/products/search?q=${query}`);
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message || "Failed to fetch products");
