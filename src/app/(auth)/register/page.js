@@ -45,7 +45,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-blue-900 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300 px-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -103,7 +103,7 @@ const Register = () => {
           <motion.button
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition-all"
+            className="w-full bg-gradient-to-r from-blue-500 via-purple-600 to-blue-500 text-white py-2 rounded-xl transition-all"
           >
             Register
           </motion.button>
@@ -111,7 +111,7 @@ const Register = () => {
         <p className="text-center text-gray-600 mt-4">
           Already have an account?{" "}
           <span
-            className="text-blue-600 cursor-pointer hover:underline"
+            className="text-purple-600 cursor-pointer hover:underline"
             onClick={() => router.push("/login")}
           >
             Login

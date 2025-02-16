@@ -34,7 +34,7 @@ const ProductDetail = () => {
   if (!product) return <p className="text-center p-6">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-center">
+    <div className="min-h-screen bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300 p-6 flex justify-center items-center">
       <div className="bg-white rounded-xl shadow-lg max-w-5xl w-full p-6 flex flex-col md:flex-row">
         {/* Product Image */}
         <div className="flex-1 flex justify-center">
