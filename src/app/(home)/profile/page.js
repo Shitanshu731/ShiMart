@@ -109,7 +109,7 @@ export default function Profile() {
   if (!loggedInUser) return <p>Please login to view your profile</p>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300">
+    <div className="mt-[6rem] max-w-md mx-auto  p-6 border rounded-lg shadow-lg bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300">
       <h2 className="text-2xl font-bold mb-4">Profile</h2>
       <input
         type="text"

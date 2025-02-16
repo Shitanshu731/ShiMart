@@ -86,7 +86,7 @@ export default function CreateProduct() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300">
+    <div className="mt-[6rem] max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300">
       <h2 className="text-xl font-bold mb-4">Create Product</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
