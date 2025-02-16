@@ -109,7 +109,7 @@ export default function Profile() {
   if (!loggedInUser) return <p>Please login to view your profile</p>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300">
       <h2 className="text-2xl font-bold mb-4">Profile</h2>
       <input
         type="text"
@@ -143,7 +143,10 @@ export default function Profile() {
         onChange={handleChange}
         className="w-full p-2 border rounded mb-4"
       />
-      <Button onClick={updateUser} className="w-full mb-2">
+      <Button
+        onClick={updateUser}
+        className="w-full mb-2 bg-gradient-to-r from-blue-500 via-purple-600 to-blue-500"
+      >
         Update Profile
       </Button>
       <Button onClick={deleteUser} variant="destructive" className="w-full">
