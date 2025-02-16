@@ -56,7 +56,7 @@ export default function ProductList() {
 
   return (
     <div
-      className={`min-h-screen p-4 transition-all duration-300 ${
+      className={`min-h-screen p-4 transition-all duration-300 mt-[4rem] ${
         theme === "dark"
           ? "bg-gradient-to-r from-gray-900 via-purple-900 to-black text-white"
           : "bg-gradient-to-r from-gray-100 via-blue-200 to-gray-300 text-black"

@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex items-center gap-2 border border-gray-300 rounded-full p-2 w-full max-w-md bg-white shadow-md">
+    <div className="flex items-center gap-2 border border-gray-300 rounded-full p-2 w-full max-w-md bg-white shadow-md max-sm:max-w-[65%]">
       {/* Search Icon */}
       <Search
         className="w-5 h-5 text-gray-500 cursor-pointer"

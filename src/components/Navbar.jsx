@@ -5,8 +5,10 @@ import SearchBar from "./SearchBar";
 import Image from "next/image";
 import ProfileSidebar from "./ProfileSidebar";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSearch = (query) => {
@@ -16,9 +18,16 @@ const Navbar = () => {
   const { loggedInUser } = useAuth();
 
   return (
-    <div className="relative">
-      <div className="flex justify-between items-center p-4 bg-white/10 backdrop-blur-md text-white rounded-lg shadow-md">
-        <h1 className="text-slate-600 font-bold shadow-lg">Shicommerce</h1>
+    <div className="fixed top-0 z-10 w-full">
+      <div className="flex justify-between z-10 items-center p-4 bg-white/10 backdrop-blur-md text-white rounded-lg shadow-[0_0_20px_5px_rgba(139,92,246,0.8)] hover:shadow-[0_0_30px_10px_rgba(99,102,241,1)] transition-shadow duration-300">
+        <Image
+          onClick={() => router.push("/")}
+          src="/ecommerceLogo.png"
+          height={40}
+          width={40}
+          alt="logo"
+          className=" rounded-lg cursor-pointer max-lg:hidden"
+        />
         <SearchBar onSearch={handleSearch} />
         <div className="flex items-center space-x-4">
           <h1 className="text-slate-500">
